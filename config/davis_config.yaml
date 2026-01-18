@@ -1,0 +1,39 @@
+# Davis Dataset Configuration
+
+dataset:
+  name: 'davis'
+  description: 'Davis kinase dataset with 68 drugs and 442 proteins'
+  
+  # Dataset statistics
+  stats:
+    num_drugs: 68
+    num_proteins: 442
+    num_interactions: 30056
+    affinity_type: 'Kd'  # Dissociation constant
+    affinity_range: [5.0, 10.8]  # -log10(Kd) range
+  
+  # Data sources
+  sources:
+    original_paper: 'Davis et al. (2011)'
+    url: 'http://staff.cs.utu.fi/~aatapa/data/DrugTarget/'
+  
+  # Preprocessing
+  preprocessing:
+    affinity_transform: 'log'  # Log transform for Kd values
+    normalization: 'standard'
+    handle_missing: 'remove'
+  
+  # Split configuration
+  splits:
+    random:
+      train: 0.7
+      val: 0.1
+      test: 0.2
+    
+    cold_drug:
+      test_drugs: 14  # 20% of drugs
+      val_drugs: 7    # 10% of drugs
+    
+    cold_target:
+      test_proteins: 88  # 20% of proteins
+      val_proteins: 44   # 10% of proteins

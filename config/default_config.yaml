@@ -1,0 +1,95 @@
+# Model Configuration for DTI Prediction
+
+# Model architecture
+model:
+  drug_gnn:
+    in_features: 78
+    hidden_dim: 256
+    out_dim: 256
+    num_layers: 3
+    heads: 4
+    dropout: 0.2
+    pooling: 'both'
+  
+  protein_plm:
+    plm_model: 'esm2'
+    embedding_dim: 1280
+    out_dim: 256
+    freeze_plm: true
+    use_pooling: 'mean'
+    dropout: 0.2
+  
+  tda_encoder:
+    input_dim: 100
+    hidden_dim: 128
+    out_dim: 256
+    num_layers: 3
+    use_persistence_images: true
+    dropout: 0.2
+  
+  fusion_attention:
+    drug_dim: 256
+    protein_dim: 256
+    tda_dim: 256
+    hidden_dim: 512
+    num_heads: 8
+    dropout: 0.2
+    fusion_type: 'attention'
+  
+  evidential_head:
+    in_dim: 512
+    hidden_dim: 256
+    dropout: 0.2
+    use_residual: true
+
+# Training configuration
+training:
+  batch_size: 32
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  num_epochs: 100
+  early_stopping_patience: 15
+  gradient_clip: 1.0
+  
+  # Loss weights
+  loss_weights:
+    evidential_coeff: 1.0
+    mse_weight: 1.0
+    
+  # Optimizer
+  optimizer: 'adam'
+  scheduler: 'reduce_on_plateau'
+  scheduler_patience: 10
+  scheduler_factor: 0.5
+
+# Data configuration
+data:
+  dataset: 'davis'  # Options: 'davis', 'kiba', 'bindingdb'
+  data_root: './data'
+  split_type: 'random'  # Options: 'random', 'cold_drug', 'cold_target', 'cold_both'
+  test_ratio: 0.2
+  val_ratio: 0.1
+  random_seed: 42
+  
+  # Preprocessing
+  max_atoms: 100
+  max_protein_length: 1000
+  tda_resolution: 20
+  tda_num_points: 50
+
+# Evaluation configuration
+evaluation:
+  metrics: ['mse', 'mae', 'rmse', 'r2', 'pearson', 'spearman', 'ci']
+  save_predictions: true
+  compute_uncertainty: true
+  uncertainty_threshold: 0.5
+
+# Logging and checkpointing
+logging:
+  log_dir: './logs'
+  checkpoint_dir: './checkpoints'
+  save_best_only: true
+  log_interval: 10
+  tensorboard: true
+  wandb: false
+  project_name: 'dti-ml-foundation'

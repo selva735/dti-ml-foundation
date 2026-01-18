@@ -205,3 +205,19 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Project-specific
+data/**/*.csv
+data/**/*.pkl
+data/**/*.h5
+checkpoints/
+logs/
+outputs/
+eval_results/
+wandb/
+*.pt
+*.pth
+*.ckpt
+
+# Datasets (keep README files)
+!data/**/README.md
