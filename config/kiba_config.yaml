@@ -1,0 +1,39 @@
+# KIBA Dataset Configuration
+
+dataset:
+  name: 'kiba'
+  description: 'KIBA dataset with 2,111 drugs and 229 proteins'
+  
+  # Dataset statistics
+  stats:
+    num_drugs: 2111
+    num_proteins: 229
+    num_interactions: 118254
+    affinity_type: 'KIBA'  # Kinase Inhibitor BioActivity score
+    affinity_range: [0, 17]  # KIBA score range
+  
+  # Data sources
+  sources:
+    original_paper: 'Tang et al. (2014)'
+    url: 'https://github.com/thinng/GraphDTA'
+  
+  # Preprocessing
+  preprocessing:
+    affinity_transform: 'none'
+    normalization: 'minmax'
+    handle_missing: 'remove'
+  
+  # Split configuration
+  splits:
+    random:
+      train: 0.7
+      val: 0.1
+      test: 0.2
+    
+    cold_drug:
+      test_drugs: 422  # 20% of drugs
+      val_drugs: 211   # 10% of drugs
+    
+    cold_target:
+      test_proteins: 46  # 20% of proteins
+      val_proteins: 23   # 10% of proteins
