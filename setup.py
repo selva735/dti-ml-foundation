@@ -32,7 +32,7 @@ setup(
     ],
     python_requires='>=3.8',
     install_requires=[
-        'torch>=2.0.0',
+        'torch>=2.2.0',
         'torch-geometric>=2.3.0',
         'rdkit>=2023.3.1',
         'transformers>=4.30.0',

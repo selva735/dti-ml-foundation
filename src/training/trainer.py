@@ -353,7 +353,7 @@ class Trainer:
         self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         
         if self.scheduler is not None and 'scheduler_state_dict' in checkpoint:
-            self.scheduler.state_dict(checkpoint['scheduler_state_dict'])
+            self.scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
         
         self.best_val_loss = checkpoint.get('best_val_loss', float('inf'))
         self.history = checkpoint.get('history', self.history)
