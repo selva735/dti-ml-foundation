@@ -1,0 +1,73 @@
+# Configuration for cold-start scenario evaluation
+
+# Model architecture (same as default)
+model:
+  hidden_dim: 256
+  gnn_layers: 3
+  gnn_type: gat
+  gnn_heads: 4
+  attention_heads: 8
+  dropout: 0.3  # Slightly higher dropout for better generalization
+  pooling: mean
+  use_cross_attention: true
+  use_self_attention: true
+
+# Data configuration for cold-start
+data:
+  dataset: sample
+  protein_model: facebook/esm2_t12_35M_UR50D
+  batch_size: 32
+  num_workers: 0
+  test_size: 0.2
+  val_size: 0.1
+  random_seed: 42
+  normalize_method: standardize
+  # Cold-start specific splitting
+  cold_start_mode: drug  # 'drug', 'target', or 'both'
+
+# Training configuration
+training:
+  n_epochs: 150  # More epochs for cold-start scenarios
+  learning_rate: 0.0005  # Lower learning rate for stability
+  weight_decay: 0.00001
+  optimizer: adamw  # AdamW often works better for cold-start
+  scheduler: plateau  # Adaptive learning rate
+  early_stopping_patience: 30  # More patience
+  gradient_clip: 1.0
+  mixed_precision: false
+  save_every: 10
+
+# Paths
+paths:
+  data_dir: ./data
+  checkpoint_dir: ./checkpoints/cold_start
+  log_dir: ./runs/cold_start
+
+# Cold-start specific evaluation
+cold_start:
+  enabled: true
+  mode: drug  # 'drug', 'target', or 'both'
+  similarity_thresholds:
+    - 0.3
+    - 0.5
+    - 0.7
+    - 0.9
+  few_shot_adaptation:
+    enabled: false
+    n_support: 5  # Number of support samples for adaptation
+    n_epochs: 10  # Adaptation epochs
+    learning_rate: 0.0001
+    freeze_encoder: true
+
+# Evaluation
+evaluation:
+  metrics:
+    - mse
+    - rmse
+    - mae
+    - pearson
+    - spearman
+    - r2
+  compute_uncertainty: true  # Uncertainty is important for cold-start
+  n_mc_samples: 50  # More samples for better uncertainty estimates
+  stratified_evaluation: true  # Evaluate by similarity ranges

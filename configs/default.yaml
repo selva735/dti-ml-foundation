@@ -1,0 +1,64 @@
+# Default configuration for DTI prediction model training
+
+# Model architecture
+model:
+  hidden_dim: 256
+  gnn_layers: 3
+  gnn_type: gat  # 'gat' or 'gin'
+  gnn_heads: 4
+  attention_heads: 8
+  dropout: 0.2
+  pooling: mean  # 'mean', 'max', or 'add'
+  use_cross_attention: true
+  use_self_attention: true
+
+# Data configuration
+data:
+  dataset: sample  # 'davis', 'kiba', 'bindingdb', or 'sample'
+  protein_model: facebook/esm2_t12_35M_UR50D  # Protein language model
+  batch_size: 32
+  num_workers: 0
+  test_size: 0.2
+  val_size: 0.1
+  random_seed: 42
+  normalize_method: standardize  # 'standardize', 'minmax', or 'log'
+
+# Training configuration
+training:
+  n_epochs: 100
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  optimizer: adam  # 'adam', 'adamw', or 'sgd'
+  scheduler: cosine  # 'cosine', 'step', 'plateau', or 'none'
+  early_stopping_patience: 20
+  gradient_clip: 1.0
+  mixed_precision: false
+  save_every: 10  # Save checkpoint every N epochs
+
+# Paths
+paths:
+  data_dir: ./data
+  checkpoint_dir: ./checkpoints
+  log_dir: ./runs
+
+# Evaluation
+evaluation:
+  metrics:
+    - mse
+    - rmse
+    - mae
+    - pearson
+    - spearman
+    - r2
+  compute_uncertainty: false
+  n_mc_samples: 30  # For MC dropout uncertainty
+
+# Cold-start evaluation
+cold_start:
+  enabled: false
+  mode: drug  # 'drug', 'target', or 'both'
+  similarity_thresholds:
+    - 0.3
+    - 0.5
+    - 0.7
+    - 0.9
