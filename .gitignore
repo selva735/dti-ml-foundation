@@ -205,3 +205,19 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ML Project specific
+data/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+runs/
+wandb/
+*.csv
+*.tsv
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+embeddings_cache/
