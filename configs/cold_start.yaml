@@ -1,0 +1,66 @@
+# CMAT-DTI Cold-Start Configuration
+# Extends defaults with cold-drug splitting and enhanced regularisation.
+
+# ── Dataset ────────────────────────────────────────────────────────────────
+data:
+  train_path: data/train.csv
+  val_path: data/val.csv
+  test_path: data/test.csv
+  smiles_col: smiles
+  sequence_col: sequence
+  label_col: label
+  drug_id_col: drug_id
+  target_id_col: target_id
+  max_atoms: 100
+  max_seq_len: 1000
+  split_mode: cold_drug                 # Unseen drugs at test time
+  test_frac: 0.15
+  val_frac: 0.1
+  seed: 42
+
+# ── Model ──────────────────────────────────────────────────────────────────
+model:
+  atom_feat_dim: 57
+  drug_embed_dim: 256
+  drug_num_layers: 6                    # Deeper for better generalisation
+  drug_num_heads: 8
+  drug_ffn_dim: 1024
+  drug_max_distance: 10
+  drug_dropout: 0.15
+  drug_pooling: attention
+
+  protein_embed_dim: 256
+  protein_num_layers: 6
+  protein_num_heads: 8
+  protein_ffn_dim: 1024
+  protein_max_seq_len: 1002
+  protein_dropout: 0.15
+  plm_input_dim: null
+
+  cross_dim: 256
+  cross_num_heads: 8
+  cross_num_layers: 3                   # More cross-attention for unseen drugs
+  cross_dropout: 0.15
+  fusion_output_dim: 512
+
+  head_hidden_dims: [256, 128]
+  head_dropout: 0.3                     # Higher dropout to prevent overfitting
+  output_dim: 1
+
+  mc_dropout_samples: 30
+  enable_uncertainty: true
+
+# ── Training ───────────────────────────────────────────────────────────────
+training:
+  n_epochs: 300
+  batch_size: 32
+  learning_rate: 5.0e-5
+  weight_decay: 1.0e-4                  # Stronger regularisation
+  max_grad_norm: 1.0
+  scheduler: cosine
+  early_stopping_patience: 40
+  task: regression
+  use_amp: false
+  num_workers: 0
+  checkpoint_dir: checkpoints/cold_start
+  log_dir: null
