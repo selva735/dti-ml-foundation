@@ -205,3 +205,12 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# CMAT-DTI project artifacts
+data/
+checkpoints/
+*.pt
+*.ckpt
+runs/
+logs/
+embeddings_cache/

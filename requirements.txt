@@ -1,0 +1,24 @@
+# CMAT-DTI dependencies
+# Core ML
+torch>=2.2.0
+numpy>=1.24.0
+scipy>=1.10.0
+scikit-learn>=1.3.0
+pandas>=2.0.0
+
+# Molecular featurization (optional but required for real-world use)
+rdkit>=2023.3.1
+
+# Config management
+pyyaml>=6.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Optional: TensorBoard logging
+tensorboard>=2.14.0
+
+# Optional: Protein Language Model embeddings
+# transformers>=4.35.0
+# fair-esm>=2.0.0

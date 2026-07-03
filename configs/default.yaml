@@ -1,0 +1,71 @@
+# CMAT-DTI Default Configuration
+# All values here are overridable from the command line.
+
+# ── Dataset ────────────────────────────────────────────────────────────────
+data:
+  train_path: data/train.csv           # Path to training CSV
+  val_path: data/val.csv               # Path to validation CSV
+  test_path: data/test.csv             # Path to test CSV
+  smiles_col: smiles
+  sequence_col: sequence
+  label_col: label
+  drug_id_col: drug_id
+  target_id_col: target_id
+  max_atoms: 100                        # Truncate molecules above this size
+  max_seq_len: 1000                     # Truncate proteins above this length
+  split_mode: random                    # random | cold_drug | cold_target | cold_both
+  test_frac: 0.1
+  val_frac: 0.1
+  seed: 42
+
+# ── Model ──────────────────────────────────────────────────────────────────
+model:
+  # Drug encoder (Molecular Graph Transformer)
+  atom_feat_dim: 57                     # Matches NUM_ATOM_FEATURES in featurizer
+  drug_embed_dim: 256
+  drug_num_layers: 4
+  drug_num_heads: 8
+  drug_ffn_dim: 512
+  drug_max_distance: 10
+  drug_dropout: 0.1
+  drug_pooling: attention
+
+  # Protein encoder (Sequence Transformer)
+  protein_embed_dim: 256
+  protein_num_layers: 4
+  protein_num_heads: 8
+  protein_ffn_dim: 512
+  protein_max_seq_len: 1002
+  protein_dropout: 0.1
+  plm_input_dim: null                   # Set to PLM embedding dim if using pre-trained PLM
+
+  # Cross-modal fusion
+  cross_dim: 256
+  cross_num_heads: 8
+  cross_num_layers: 2
+  cross_dropout: 0.1
+  fusion_output_dim: 512
+
+  # Prediction head
+  head_hidden_dims: [256, 128]
+  head_dropout: 0.2
+  output_dim: 1
+
+  # Uncertainty
+  mc_dropout_samples: 20
+  enable_uncertainty: true
+
+# ── Training ───────────────────────────────────────────────────────────────
+training:
+  n_epochs: 200
+  batch_size: 32
+  learning_rate: 1.0e-4
+  weight_decay: 1.0e-5
+  max_grad_norm: 1.0
+  scheduler: plateau                   # plateau | cosine
+  early_stopping_patience: 30
+  task: regression                     # regression | classification
+  use_amp: false                       # Automatic mixed precision (GPU only)
+  num_workers: 0
+  checkpoint_dir: checkpoints/default
+  log_dir: null                        # Set to a path to enable TensorBoard
